@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="お好みラジオ">
 <meta name="theme-color" content="#15131e">
 <title>お好みラジオ</title>
@@ -15,11 +14,11 @@
     background: radial-gradient(1200px 600px at 50% -10%, #221f33 0%, #15131e 55%, #0e0c14 100%);
     color: #d8d4e0;
     font-family: 'Hiragino Maru Gothic ProN','Hiragino Sans','Yu Gothic',sans-serif;
-    padding: max(28px, env(safe-area-inset-top)) 18px 48px;
+    padding: max(24px, env(safe-area-inset-top)) 16px 48px;
   }
   .wrap { max-width: 480px; margin: 0 auto; }
-  header { text-align: center; margin-bottom: 22px; }
-  .lamprow { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 10px; }
+  header { text-align: center; margin-bottom: 18px; }
+  .lamprow { display: flex; gap: 8px; align-items: center; justify-content: center; margin-bottom: 8px; }
   .lamp { width: 10px; height: 10px; border-radius: 50%; background: #3a3630; transition: all .4s ease; }
   .lamp.on {
     background: #ffb454;
@@ -31,9 +30,15 @@
     50%     { box-shadow: 0 0 16px #ffc878, 0 0 36px rgba(255,180,84,.65); }
   }
   .onair { font-size: 11px; letter-spacing: .3em; color: #8d8798; }
-  h1 { font-size: 28px; font-weight: 800; letter-spacing: .1em; margin: 0; color: #f3eee6; }
-  .sub { font-size: 12px; color: #8d8798; margin-top: 6px; }
-  section { margin-bottom: 20px; }
+  h1 { font-size: 26px; font-weight: 800; letter-spacing: .1em; margin: 0; color: #f3eee6; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 18px; }
+  .tab {
+    flex: 1; padding: 12px 6px; border-radius: 12px; text-align: center;
+    border: 1px solid #3d3a45; color: #b9b4c2; font-size: 13px; cursor: pointer;
+    background: transparent; font-family: inherit;
+  }
+  .tab.on { border-color: #ffb454; color: #ffd9a0; background: rgba(255,180,84,.08); }
+  section { margin-bottom: 18px; }
   .label { font-size: 12px; letter-spacing: .15em; color: #8d8798; margin-bottom: 8px; }
   textarea {
     width: 100%; min-height: 100px;
@@ -44,11 +49,17 @@
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chip {
     border: 1px solid #3d3a45; background: transparent; color: #b9b4c2;
-    border-radius: 999px; padding: 9px 14px; font-size: 13px;
+    border-radius: 999px; padding: 9px 13px; font-size: 13px;
     cursor: pointer; font-family: inherit;
   }
   .chip.on { border-color: #ffb454; color: #ffd9a0; background: rgba(255,180,84,.08); }
   .chip small { display: block; font-size: 10px; color: #8d8798; }
+  input[type=text] {
+    margin-top: 10px; width: 100%;
+    background: rgba(255,255,255,.04); border: 1px solid #3d3a45;
+    border-radius: 10px; color: #e8e4f0; padding: 11px 12px;
+    font-size: 16px; font-family: inherit;
+  }
   input[type=range] { width: 100%; accent-color: #ffb454; }
   select {
     width: 100%; background: #1c1926; border: 1px solid #3d3a45;
@@ -59,26 +70,35 @@
     width: 100%; padding: 16px; border-radius: 14px; border: none;
     background: linear-gradient(180deg,#ffb454,#e89638); color: #221a0e;
     font-size: 16px; font-weight: 700; cursor: pointer; font-family: inherit;
-    letter-spacing: .05em; margin-bottom: 10px;
+    letter-spacing: .05em; margin-bottom: 8px;
   }
-  .controls { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-  .ctl {
-    border: 1px solid #3d3a45; background: transparent; color: #d8d4e0;
-    border-radius: 10px; padding: 11px 16px; font-size: 14px;
-    cursor: pointer; font-family: inherit;
+  .ghost {
+    width: 100%; padding: 13px; border-radius: 12px;
+    border: 1px solid #3d3a45; background: transparent; color: #b9b4c2;
+    font-size: 14px; cursor: pointer; font-family: inherit;
   }
   .dim { font-size: 12px; color: #8d8798; }
-  .note { font-size: 12px; color: #8d8798; line-height: 1.7; margin-top: 8px; }
+  .note { font-size: 12px; color: #8d8798; line-height: 1.7; margin-top: 6px; }
   #scriptBox {
     background: rgba(255,255,255,.03); border: 1px solid #2c2935;
     border-radius: 14px; padding: 18px 16px; line-height: 1.9; display: none;
   }
   #scriptBox p { margin: 0 0 12px; font-size: 15px; color: #a9a4b5; cursor: pointer; }
   #scriptBox p.now { color: #ffd9a0; }
-  #scriptBox p:active { color: #e8e4f0; }
   .mt14 { margin-top: 14px; }
   .row { display: flex; gap: 8px; }
   .row > * { flex: 1; }
+  .ep {
+    border: 1px solid #2c2935; border-radius: 12px; padding: 14px;
+    margin-bottom: 8px; cursor: pointer; font-size: 15px;
+  }
+  .ep.on { border-color: #ffb454; color: #ffd9a0; }
+  audio { width: 100%; margin-top: 10px; }
+  .prompt-preview {
+    background: rgba(255,255,255,.03); border: 1px solid #2c2935;
+    border-radius: 12px; padding: 12px; font-size: 13px; color: #a9a4b5;
+    line-height: 1.7; white-space: pre-wrap; display: none; margin-top: 10px;
+  }
 </style>
 </head>
 <body>
@@ -89,67 +109,105 @@
       <span class="onair" id="onair">OFF AIR</span>
     </div>
     <h1>お好みラジオ</h1>
-    <div class="sub">v5.1 — 完全版</div>
   </header>
 
-  <section>
-    <div class="label">番組をえらぶ（ライブラリ）</div>
-    <select id="libSel"></select>
-    <div class="row mt14">
-      <button class="ctl" id="saveBtn">＋ 今の台本を保存</button>
-      <button class="ctl" id="delBtn">－ 削除</button>
-    </div>
-  </section>
+  <div class="tabs">
+    <button class="tab" id="tabMake">台本をつくる</button>
+    <button class="tab on" id="tabPlay">きく(即席)</button>
+    <button class="tab" id="tabShelf">棚(MP3)</button>
+  </div>
 
-  <section>
-    <div class="label">台本（タップで編集・貼り替え）</div>
-    <textarea id="scriptInput"></textarea>
-    <div class="note">新しい台本は、iPhoneのClaudeアプリで「今夜のぶん作って」「太宰の朗読作って」と頼んでコピーし、ここに貼って保存。</div>
-  </section>
+  <!-- ============ つくる ============ -->
+  <div id="paneMake" style="display:none">
+    <section>
+      <div class="label">タイプ</div>
+      <div class="chips" id="makeType"></div>
+    </section>
 
-  <section>
-    <div class="label">BGM（DJ moriking オリジナル）</div>
-    <div class="chips" id="bgmChips"></div>
-    <div class="mt14">
-      <div class="label">BGMの音量 <span class="dim" id="bgmVolVal">25%</span></div>
-      <input type="range" id="bgmVol" min="0" max="100" step="1" value="25">
-    </div>
-  </section>
+    <section id="makeNews">
+      <div class="label">きょうの話題(チェック)</div>
+      <div class="chips" id="topicChips"></div>
+      <input type="text" id="freeTopic" placeholder="自由トピック(例: 大阪グルメ、F1の結果)">
+    </section>
 
-  <section>
-    <div class="label">スリープタイマー</div>
-    <div class="chips" id="timerChips"></div>
-    <div class="mt14">
-      <div class="label">読む速さ <span class="dim" id="rateVal">0.90</span></div>
-      <input type="range" id="rate" min="0.6" max="1.2" step="0.05" value="0.9">
-    </div>
-    <div class="mt14" id="voiceWrap">
-      <div class="label">こえ <span class="dim" id="voiceCount"></span></div>
-      <select id="voiceSel"></select>
+    <section id="makeStory" style="display:none">
+      <div class="label">作家・カテゴリ</div>
+      <select id="storyAuthor"></select>
+      <div class="label mt14">作品・お題</div>
+      <select id="storyWork"></select>
+      <input type="text" id="freeStory" placeholder="または自由に(例: 月の話、賢治の他の作品)">
+    </section>
+
+    <section>
+      <button class="bigbtn" id="makeBtn">依頼文をコピーしてClaudeへ</button>
+      <div class="note">押すと依頼文がコピーされ、Claudeが開きます。送信 → できた台本をコピー → 「きく」タブに貼って保存。</div>
+      <div class="prompt-preview" id="promptPreview"></div>
+    </section>
+  </div>
+
+  <!-- ============ きく(即席) ============ -->
+  <div id="panePlay">
+    <section>
+      <div class="label">番組をえらぶ(ライブラリ)</div>
+      <select id="libSel"></select>
       <div class="row mt14">
-        <button class="ctl" id="voiceReload">↻ 声を再読み込み</button>
-        <button class="ctl" id="voiceTest">🗣 声テスト</button>
+        <button class="ghost" id="saveBtn">＋ 今の台本を保存</button>
+        <button class="ghost" id="delBtn">－ 削除</button>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section>
-    <button class="bigbtn" id="playBtn">▶ 放送をはじめる</button>
-    <div class="controls">
-      <button class="ctl" id="stopBtn">⏹ 停止</button>
-      <button class="ctl" id="bgmTest">🔊 BGMテスト</button>
-      <span class="dim" id="timerNote"></span>
-    </div>
-    <div class="note">下に出る台本の<b>好きな行をタップすると、そこから再生</b>します。続きから聴くときに。</div>
-  </section>
+    <section>
+      <div class="label">台本</div>
+      <textarea id="scriptInput"></textarea>
+    </section>
 
-  <section id="scriptBox"></section>
+    <section>
+      <div class="label">BGM(DJ moriking)</div>
+      <div class="chips" id="bgmChips"></div>
+      <div class="mt14">
+        <div class="label">BGMの音量 <span class="dim" id="bgmVolVal">25%</span></div>
+        <input type="range" id="bgmVol" min="0" max="100" step="1" value="25">
+      </div>
+    </section>
+
+    <section>
+      <div class="label">スリープタイマー</div>
+      <div class="chips" id="timerChips"></div>
+      <div class="mt14">
+        <div class="label">読む速さ <span class="dim" id="rateVal">0.90</span></div>
+        <input type="range" id="rate" min="0.6" max="1.2" step="0.05" value="0.9">
+      </div>
+      <div class="mt14" id="voiceWrap" style="display:none">
+        <div class="label">こえ</div>
+        <select id="voiceSel"></select>
+      </div>
+    </section>
+
+    <section>
+      <button class="bigbtn" id="playBtn">▶ 放送をはじめる</button>
+      <div class="note">台本の<b>好きな行をタップすると、そこから再生</b>。タイマーで自動停止します。</div>
+    </section>
+
+    <section id="scriptBox"></section>
+  </div>
+
+  <!-- ============ 棚(MP3) ============ -->
+  <div id="paneShelf" style="display:none">
+    <section>
+      <div class="label">エピソード(高音質・画面ロックOK)</div>
+      <div id="epList"><div class="note">読み込み中…</div></div>
+      <audio id="epAudio" controls preload="none" playsinline></audio>
+      <div class="note">VOICEVOXで作ったMP3を episodes フォルダに置き、episodes.json に追記すると、ここに並びます。</div>
+    </section>
+  </div>
 </div>
 
 <audio id="bgmAudio" preload="auto" playsinline loop></audio>
 
 <script>
-var BUILTIN = [{"id": "builtin_news", "title": "📰 ニュース(貼り替え用ひな形)", "text": "こんばんは。今夜の放送です。今日も一日、おつかれさまでした。灯りを少し落として、ゆっくり聞いてください。\nここに、Claudeに作ってもらった今夜の台本を貼り替えてください。Claudeアプリで、今夜のぶん作って、と頼むだけです。\nそれでは、おやすみなさい。"}, {"id": "builtin_kumo", "title": "📖 芥川龍之介・蜘蛛の糸", "text": "今夜は、芥川龍之介の、蜘蛛の糸をお届けします。大正七年に書かれた、短いお話です。それでは、はじめます。\nある日のことです。お釈迦様は極楽の蓮池のほとりを、ひとりで静かに歩いておられました。池に咲く蓮の花は真っ白で、その真ん中の金色のずいからは、なんとも言えないよい香りが、あたりに絶え間なくあふれています。極楽は、ちょうど朝なのでした。\nやがてお釈迦様は池のふちに立ち止まり、水の面をおおう蓮の葉のあいだから、ふと下の様子をご覧になりました。この極楽の蓮池の下は、ちょうど地獄の底にあたっていますから、水晶のような水を透かして、三途の川や針の山の景色が、まるでのぞき眼鏡を見るように、はっきりと見えるのです。\nすると、その地獄の底に、カンダタという男が、ほかの罪人と一緒にうごめいている姿が、お目に留まりました。このカンダタという男は、人を殺したり家に火をつけたり、いろいろ悪事を働いた大泥棒です。それでもたったひとつ、よいことをした覚えがありました。あるとき深い林の中を通りますと、小さな蜘蛛が一匹、道ばたを這っていくのが見えました。カンダタは足を上げて踏み殺そうとしましたが、いや、待て待て、小さいながらこれも命のあるものに違いない、と思い直して、とうとう蜘蛛を助けてやったのです。\nお釈迦様は地獄の様子をご覧になりながら、このカンダタが蜘蛛を助けたことをお思い出しになりました。そして、それだけのよいことをした報いには、できるならこの男を地獄から救い出してやろうとお考えになりました。幸い、そばを見ますと、極楽の蜘蛛が一匹、美しい銀色の糸をかけています。お釈迦様はその蜘蛛の糸をそっとお手に取って、白い蓮のあいだから、はるか下にある地獄の底へ、まっすぐにお下ろしになりました。\nこちらは地獄の底の血の池で、カンダタがほかの罪人と一緒に、浮いたり沈んだりしていました。どちらを見ても真っ暗で、ときおり浮かび上がるのは恐ろしい針の山の光るばかり。あたりは墓の中のようにしんと静まり返って、聞こえるものといえば、罪人たちのかすかな溜め息だけです。\nところがある時のことです。カンダタが何気なく頭を上げて空をながめますと、その暗闇の中を、遠い遠い天の上から、銀色の蜘蛛の糸が一すじ、まるで人目を忍ぶように、するすると自分の上へ垂れてくるではありませんか。カンダタは思わず手を打って喜びました。この糸にすがって、どこまでものぼっていけば、きっと地獄から抜け出せる。いや、うまくいけば、極楽へ入ることさえできるかもしれない。\nカンダタはさっそくその糸を両手でしっかりつかみ、一生懸命に、上へ上へとのぼり始めました。もとより大泥棒のことですから、こういうことには昔から慣れたものです。けれども地獄と極楽のあいだは何万里とありますから、いくらあせってみたところで、容易に上へは出られません。ややしばらくのぼるうちに、さすがのカンダタもくたびれて、ひと休みするつもりで糸の途中にぶら下がり、はるか下を見おろしました。\nすると、一生懸命のぼった甲斐があって、さっきまで自分がいた血の池は、もう闇の底に隠れています。あの針の山も、足の下になっているのです。この分でのぼっていけば、地獄から抜け出すのも、案外わけがないかもしれません。カンダタは何年ぶりかで、ほっと声を出して笑いました。\nところが、ふと気がつきますと、糸の下のほうには、数えきれない罪人たちが、自分ののぼったあとをつけて、まるで蟻の行列のように、せっせとのぼってくるではありませんか。カンダタは驚き、また恐ろしくなりました。この細い糸が、あれだけの人数の重みに耐えられるはずがない。途中で切れたら、せっかくここまでのぼった自分まで、もとの地獄へ逆落としに落ちてしまう。\nそこでカンダタは大きな声を出して、こら、罪人ども、この糸は俺のものだぞ、お前たちは一体誰に聞いて、のぼってきた。下りろ、下りろ、と喚きました。\nその途端です。今まで何ともなかった蜘蛛の糸が、急にカンダタのぶら下がっているところから、ぷつりと音を立てて切れました。カンダタはたまりません。あっと言う間もなく風を切って、こまのようにくるくる回りながら、見る見るうちに闇の底へ、まっさかさまに落ちてしまいました。あとにはただ、極楽の蜘蛛の糸が、きらきらと細く光りながら、月も星もない空の途中に、短く垂れているばかりです。\nお釈迦様は極楽の蓮池のふちに立って、この一部始終をじっとご覧になっていましたが、やがてカンダタが血の池の底へ沈んでしまうと、悲しそうなお顔をなさりながら、また静かに歩き始められました。自分ばかり助かろうとして、慈悲の心を忘れたカンダタの姿が、あさましく思し召されたのでしょう。\nけれども極楽の蓮池の蓮は、そんなことには頓着いたしません。玉のような白い花は、お釈迦様の足のまわりに、ゆらゆらと揺れて、その真ん中の金色のずいからは、なんとも言えないよい香りが、絶え間なくあたりにあふれています。極楽も、もう昼に近くなったのでした。\n今夜のお話は、ここまでです。糸は、誰の心にも垂れてくるのかもしれません。それでは、ゆっくりおやすみなさい。"}];
+var BUILTIN = [{"id": "builtin_news", "title": "📰 ニュース(貼り替え用ひな形)", "text": "こんばんは。今夜の放送です。今日も一日、おつかれさまでした。灯りを少し落として、ゆっくり聞いてください。\nここに、Claudeに作ってもらった今夜の台本を貼り替えてください。つくるタブから依頼文を作れます。\nそれでは、おやすみなさい。"}, {"id": "builtin_kumo", "title": "📖 芥川龍之介・蜘蛛の糸", "text": "今夜は、芥川龍之介の、蜘蛛の糸をお届けします。大正七年に書かれた、短いお話です。それでは、はじめます。\nある日のことです。お釈迦様は極楽の蓮池のほとりを、ひとりで静かに歩いておられました。池に咲く蓮の花は真っ白で、その真ん中の金色のずいからは、なんとも言えないよい香りが、あたりに絶え間なくあふれています。極楽は、ちょうど朝なのでした。\nやがてお釈迦様は池のふちに立ち止まり、水の面をおおう蓮の葉のあいだから、ふと下の様子をご覧になりました。この極楽の蓮池の下は、ちょうど地獄の底にあたっていますから、水晶のような水を透かして、三途の川や針の山の景色が、まるでのぞき眼鏡を見るように、はっきりと見えるのです。\nすると、その地獄の底に、カンダタという男が、ほかの罪人と一緒にうごめいている姿が、お目に留まりました。このカンダタという男は、人を殺したり家に火をつけたり、いろいろ悪事を働いた大泥棒です。それでもたったひとつ、よいことをした覚えがありました。あるとき深い林の中を通りますと、小さな蜘蛛が一匹、道ばたを這っていくのが見えました。カンダタは足を上げて踏み殺そうとしましたが、いや、待て待て、小さいながらこれも命のあるものに違いない、と思い直して、とうとう蜘蛛を助けてやったのです。\nお釈迦様は地獄の様子をご覧になりながら、このカンダタが蜘蛛を助けたことをお思い出しになりました。そして、それだけのよいことをした報いには、できるならこの男を地獄から救い出してやろうとお考えになりました。幸い、そばを見ますと、極楽の蜘蛛が一匹、美しい銀色の糸をかけています。お釈迦様はその蜘蛛の糸をそっとお手に取って、白い蓮のあいだから、はるか下にある地獄の底へ、まっすぐにお下ろしになりました。\nこちらは地獄の底の血の池で、カンダタがほかの罪人と一緒に、浮いたり沈んだりしていました。どちらを見ても真っ暗で、ときおり浮かび上がるのは恐ろしい針の山の光るばかり。あたりは墓の中のようにしんと静まり返って、聞こえるものといえば、罪人たちのかすかな溜め息だけです。\nところがある時のことです。カンダタが何気なく頭を上げて空をながめますと、その暗闇の中を、遠い遠い天の上から、銀色の蜘蛛の糸が一すじ、まるで人目を忍ぶように、するすると自分の上へ垂れてくるではありませんか。カンダタは思わず手を打って喜びました。この糸にすがって、どこまでものぼっていけば、きっと地獄から抜け出せる。いや、うまくいけば、極楽へ入ることさえできるかもしれない。\nカンダタはさっそくその糸を両手でしっかりつかみ、一生懸命に、上へ上へとのぼり始めました。もとより大泥棒のことですから、こういうことには昔から慣れたものです。けれども地獄と極楽のあいだは何万里とありますから、いくらあせってみたところで、容易に上へは出られません。ややしばらくのぼるうちに、さすがのカンダタもくたびれて、ひと休みするつもりで糸の途中にぶら下がり、はるか下を見おろしました。\nすると、一生懸命のぼった甲斐があって、さっきまで自分がいた血の池は、もう闇の底に隠れています。あの針の山も、足の下になっているのです。この分でのぼっていけば、地獄から抜け出すのも、案外わけがないかもしれません。カンダタは何年ぶりかで、ほっと声を出して笑いました。\nところが、ふと気がつきますと、糸の下のほうには、数えきれない罪人たちが、自分ののぼったあとをつけて、まるで蟻の行列のように、せっせとのぼってくるではありませんか。カンダタは驚き、また恐ろしくなりました。この細い糸が、あれだけの人数の重みに耐えられるはずがない。途中で切れたら、せっかくここまでのぼった自分まで、もとの地獄へ逆落としに落ちてしまう。\nそこでカンダタは大きな声を出して、こら、罪人ども、この糸は俺のものだぞ、お前たちは一体誰に聞いて、のぼってきた。下りろ、下りろ、と喚きました。\nその途端です。今まで何ともなかった蜘蛛の糸が、急にカンダタのぶら下がっているところから、ぷつりと音を立てて切れました。カンダタはたまりません。あっと言う間もなく風を切って、こまのようにくるくる回りながら、見る見るうちに闇の底へ、まっさかさまに落ちてしまいました。あとにはただ、極楽の蜘蛛の糸が、きらきらと細く光りながら、月も星もない空の途中に、短く垂れているばかりです。\nお釈迦様は極楽の蓮池のふちに立って、この一部始終をじっとご覧になっていましたが、やがてカンダタが血の池の底へ沈んでしまうと、悲しそうなお顔をなさりながら、また静かに歩き始められました。自分ばかり助かろうとして、慈悲の心を忘れたカンダタの姿が、あさましく思し召されたのでしょう。\nけれども極楽の蓮池の蓮は、そんなことには頓着いたしません。玉のような白い花は、お釈迦様の足のまわりに、ゆらゆらと揺れて、その真ん中の金色のずいからは、なんとも言えないよい香りが、絶え間なくあたりにあふれています。極楽も、もう昼に近くなったのでした。\n今夜のお話は、ここまでです。糸は、誰の心にも垂れてくるのかもしれません。それでは、ゆっくりおやすみなさい。"}];
+var STORY_INDEX = {"芥川龍之介": ["蜘蛛の糸", "杜子春", "魔術", "トロッコ", "鼻", "蜜柑"], "太宰治": ["走れメロス", "富嶽百景", "駈込み訴え", "葉桜と魔笛", "畜犬談"], "夏目漱石": ["夢十夜(第一夜)", "夢十夜(第三夜)", "文鳥", "永日小品より"], "宮沢賢治": ["注文の多い料理店", "よだかの星", "セロ弾きのゴーシュ", "やまなし", "雪渡り"], "小泉八雲(怪談)": ["耳なし芳一", "雪女", "むじな", "ろくろ首"], "世界の名作(新訳)": ["オー・ヘンリー 賢者の贈り物", "ポー 黒猫", "チェーホフ 可愛い女", "イソップ物語より", "グリム童話より", "アンデルセン マッチ売りの少女", "千夜一夜物語より"], "日本の昔話": ["かぐや姫", "浦島太郎", "鶴の恩返し", "笠地蔵", "おむすびころりん"], "眠れる教養話": ["お金の歴史", "眠れる宇宙の話", "コード進行はなぜ気持ちいい", "シンセサイザーの歴史", "眠りの科学", "東京の街の歴史", "コーヒーの歴史"], "眠れる落語": ["目黒のさんま", "まんじゅうこわい", "時そば", "寿限無", "芝浜"]};
+var NEWS_TOPICS = ["今日の出来事(日本)", "世界の出来事", "株価・マーケット", "天気(あす)", "板橋区の話題", "東京グルメ", "おでかけ情報", "音楽ニュース", "AIの最新動向"];
 
 var TRACKS = [
   ["none","BGMなし",""],
@@ -168,7 +226,105 @@ var speaking = false, paused = false, sleepTimer = null;
 var jaVoices = [];
 var bgm = document.getElementById("bgmAudio");
 
-// ───── ライブラリ(保存/読込) ─────
+// ───── タブ ─────
+var panes = { make: "paneMake", play: "panePlay", shelf: "paneShelf" };
+var tabs  = { make: "tabMake",  play: "tabPlay",  shelf: "tabShelf" };
+function showPane(key){
+  Object.keys(panes).forEach(function(k){
+    document.getElementById(panes[k]).style.display = (k===key) ? "block" : "none";
+    document.getElementById(tabs[k]).className = "tab" + (k===key ? " on" : "");
+  });
+}
+document.getElementById("tabMake").onclick = function(){ showPane("make"); };
+document.getElementById("tabPlay").onclick = function(){ showPane("play"); };
+document.getElementById("tabShelf").onclick = function(){ showPane("shelf"); loadEpisodes(); };
+
+// ───── つくる ─────
+var makeMode = "news";
+var makeTypeBox = document.getElementById("makeType");
+[["news","今夜のニュース"],["story","お話・朗読"]].forEach(function(t){
+  var b = document.createElement("button");
+  b.className = "chip" + (makeMode===t[0] ? " on" : "");
+  b.textContent = t[1];
+  b.onclick = function(){
+    makeMode = t[0];
+    Array.prototype.forEach.call(makeTypeBox.children, function(c){ c.className = "chip"; });
+    b.className = "chip on";
+    document.getElementById("makeNews").style.display = makeMode==="news" ? "block" : "none";
+    document.getElementById("makeStory").style.display = makeMode==="story" ? "block" : "none";
+  };
+  makeTypeBox.appendChild(b);
+});
+
+var topicSel = {};
+var topicChips = document.getElementById("topicChips");
+NEWS_TOPICS.forEach(function(name, i){
+  if (i < 3) topicSel[name] = true;
+  var b = document.createElement("button");
+  b.className = "chip" + (topicSel[name] ? " on" : "");
+  b.textContent = name;
+  b.onclick = function(){
+    topicSel[name] = !topicSel[name];
+    b.className = "chip" + (topicSel[name] ? " on" : "");
+  };
+  topicChips.appendChild(b);
+});
+
+var authorSel = document.getElementById("storyAuthor");
+Object.keys(STORY_INDEX).forEach(function(a){
+  var o = document.createElement("option");
+  o.value = a; o.textContent = a;
+  authorSel.appendChild(o);
+});
+function refreshWorks(){
+  var workSel = document.getElementById("storyWork");
+  workSel.innerHTML = "";
+  (STORY_INDEX[authorSel.value] || []).forEach(function(w){
+    var o = document.createElement("option");
+    o.value = w; o.textContent = w;
+    workSel.appendChild(o);
+  });
+}
+authorSel.onchange = refreshWorks;
+refreshWorks();
+
+function buildPrompt(){
+  var d = new Date();
+  var dateStr = d.getFullYear() + "年" + (d.getMonth()+1) + "月" + d.getDate() + "日";
+  var common = "\n\n条件:\n- 落ち着いた、です・ます調。寝る前に聴く低温なトーン\n- 記号・見出し・箇条書き・絵文字・URLは使わない。朗読用の文章のみ\n- 最後は、おやすみなさい、で締める\n- 台本の本文だけを出力する";
+  if (makeMode === "news"){
+    var names = NEWS_TOPICS.filter(function(n){ return topicSel[n]; });
+    var free = document.getElementById("freeTopic").value.trim();
+    if (free) names.push(free);
+    if (!names.length){ alert("話題をひとつ以上選んでください"); return null; }
+    return "あなたは深夜ラジオの落ち着いたパーソナリティです。今日は" + dateStr + "です。ウェブ検索を使って、次のトピックの今日・直近の動きを調べて、ひとつの番組台本(読み上げ10分ほど)を書いてください: " + names.join("、") + "。各トピックは短いコーナーとして順番に。元記事の文章は使わず、必ず自分の言葉で語り直してください。冒頭に今日の日付と短い挨拶を入れてください。" + common;
+  } else {
+    var author = authorSel.value;
+    var work = document.getElementById("storyWork").value;
+    var freeS = document.getElementById("freeStory").value.trim();
+    var target = freeS || (author + "の「" + work + "」");
+    if (author === "眠れる教養話" && !freeS) target = "「" + work + "」というテーマの教養話";
+    if (author === "日本の昔話" && !freeS) target = "昔話「" + work + "」";
+    if (author === "眠れる落語" && !freeS) target = "古典落語「" + work + "」";
+    return "あなたは深夜の朗読番組の語り手です。" + target + "を、原文の引き写しではなく、あなた自身の現代のやさしい言葉で、寝る前の朗読(15分ほど)として語り直してください。冒頭で題名を静かに紹介してください。著作権が有効な作品(作者の没後70年以内)は扱わないでください。" + common;
+  }
+}
+
+document.getElementById("makeBtn").onclick = function(){
+  var p = buildPrompt();
+  if (!p) return;
+  var pv = document.getElementById("promptPreview");
+  pv.textContent = p;
+  pv.style.display = "block";
+  var open = function(){
+    window.open("https://claude.ai/new?q=" + encodeURIComponent(p), "_blank");
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(p).then(open, open);
+  } else { open(); }
+};
+
+// ───── ライブラリ ─────
 function loadLib(){
   var saved = [];
   try { saved = JSON.parse(localStorage.getItem("okonomi_lib") || "[]"); } catch(e){}
@@ -196,7 +352,7 @@ document.getElementById("libSel").onchange = function(){ stopAll(); applyLib(thi
 document.getElementById("saveBtn").onclick = function(){
   var text = document.getElementById("scriptInput").value.trim();
   if (!text){ alert("台本が空です"); return; }
-  var title = prompt("番組名をつけてください", "📰 " + (new Date().getMonth()+1) + "/" + new Date().getDate() + " のニュース");
+  var title = prompt("番組名をつけてください", "📰 " + (new Date().getMonth()+1) + "/" + new Date().getDate());
   if (!title) return;
   var saved = [];
   try { saved = JSON.parse(localStorage.getItem("okonomi_lib") || "[]"); } catch(e){}
@@ -205,7 +361,6 @@ document.getElementById("saveBtn").onclick = function(){
   try { localStorage.setItem("okonomi_lib", JSON.stringify(saved)); } catch(e){ alert("保存に失敗: " + e.message); return; }
   refreshLibUI(id);
 };
-
 document.getElementById("delBtn").onclick = function(){
   var id = document.getElementById("libSel").value;
   if (id.indexOf("user_") !== 0){ alert("内蔵の番組は削除できません"); return; }
@@ -236,7 +391,6 @@ TRACKS.forEach(function(t){
   bgmChips.appendChild(b);
 });
 bgm.src = "audio/" + currentBgm + ".m4a";
-
 function startBgm(){
   if (currentBgm === "none") return;
   bgm.volume = parseInt(document.getElementById("bgmVol").value,10)/100;
@@ -245,15 +399,6 @@ function startBgm(){
 document.getElementById("bgmVol").oninput = function(){
   document.getElementById("bgmVolVal").textContent = this.value + "%";
   bgm.volume = parseInt(this.value,10)/100;
-};
-document.getElementById("bgmTest").onclick = function(){
-  if (bgm.paused){
-    startBgm();
-    this.textContent = "🔇 BGMとめる";
-  } else {
-    bgm.pause();
-    this.textContent = "🔊 BGMテスト";
-  }
 };
 
 // ───── タイマー ─────
@@ -275,51 +420,28 @@ function loadVoices(){
   if (!window.speechSynthesis) return;
   var all = speechSynthesis.getVoices() || [];
   var ja = all.filter(function(v){ return v.lang && v.lang.indexOf("ja") === 0; });
-  // 声が増えたときだけリストを作り直す(選択を保持)
   if (ja.length && ja.length !== jaVoices.length){
     var sel = document.getElementById("voiceSel");
-    var keep = sel.value;
     jaVoices = ja;
     sel.innerHTML = "";
     jaVoices.forEach(function(v,i){
       var o = document.createElement("option");
-      o.value = i;
-      o.textContent = v.name + (v.name.indexOf("拡張")>=0 || v.name.toLowerCase().indexOf("enhanced")>=0 ? " ★" : "");
+      o.value = i; o.textContent = v.name;
       sel.appendChild(o);
     });
-    if (keep && keep < jaVoices.length) sel.value = keep;
-    document.getElementById("voiceCount").textContent = "(" + jaVoices.length + "声)";
+    if (jaVoices.length > 1) document.getElementById("voiceWrap").style.display = "block";
   }
 }
 loadVoices();
 if (window.speechSynthesis){
   speechSynthesis.onvoiceschanged = loadVoices;
-  // iOS Safariは声リストが遅れて来るので、しつこくリトライ
-  [300, 800, 1500, 3000, 5000].forEach(function(ms){ setTimeout(loadVoices, ms); });
+  [300, 800, 1500, 3000].forEach(function(ms){ setTimeout(loadVoices, ms); });
 }
-document.getElementById("voiceReload").onclick = function(){
-  jaVoices = []; // 強制再構築
-  loadVoices();
-  var n = (speechSynthesis.getVoices()||[]).filter(function(v){return v.lang && v.lang.indexOf("ja")===0;}).length;
-  if (!n) alert("まだ声リストが届いていません。もう一度押すか、ページを再読み込みしてください。");
-};
-document.getElementById("voiceTest").onclick = function(){
-  if (!window.speechSynthesis) return;
-  speechSynthesis.cancel();
-  var u = new SpeechSynthesisUtterance("こんばんは。この声と速さで、今夜の放送をお届けします。");
-  var selIdx = parseInt(document.getElementById("voiceSel").value || "0", 10);
-  if (jaVoices[selIdx]) u.voice = jaVoices[selIdx];
-  u.lang = "ja-JP";
-  u.rate = parseFloat(document.getElementById("rate").value);
-  u.pitch = 0.95;
-  speechSynthesis.speak(u);
-};
-
 document.getElementById("rate").oninput = function(){
   document.getElementById("rateVal").textContent = parseFloat(this.value).toFixed(2);
 };
 
-// ───── 朗読(行タップでジャンプ可) ─────
+// ───── 朗読 ─────
 function splitLines(text){
   var raw = text.replace(/\n+/g, "。");
   var out = [], buf = "";
@@ -335,7 +457,6 @@ function splitLines(text){
   if (last) out.push(last);
   return out;
 }
-
 function renderScript(){
   var box = document.getElementById("scriptBox");
   box.innerHTML = "";
@@ -348,9 +469,7 @@ function renderScript(){
   });
   box.style.display = "block";
 }
-
 function jumpTo(i){
-  // 好きな行から再生
   if (!lines.length) return;
   if (window.speechSynthesis) speechSynthesis.cancel();
   queueIdx = i;
@@ -360,19 +479,17 @@ function jumpTo(i){
   armTimer();
   speakNext();
 }
-
 function speakNext(){
   if (!speaking) return;
   if (queueIdx >= lines.length){
     var prev0 = document.querySelector("#scriptBox p.now");
     if (prev0) prev0.className = "";
-    return; // 朗読おわり。BGMはタイマーまで継続
+    return;
   }
   var prev = document.querySelector("#scriptBox p.now");
   if (prev) prev.className = "";
   var cur = document.getElementById("line" + queueIdx);
-  if (cur){ cur.className = "now"; }
-
+  if (cur) cur.className = "now";
   var u = new SpeechSynthesisUtterance(lines[queueIdx]);
   var selIdx = parseInt(document.getElementById("voiceSel").value || "0", 10);
   if (jaVoices[selIdx]) u.voice = jaVoices[selIdx];
@@ -384,23 +501,15 @@ function speakNext(){
   u.onerror = speakNext;
   speechSynthesis.speak(u);
 }
-
 function setOnAir(on){
   document.getElementById("lamp").className = on ? "lamp on" : "lamp";
   document.getElementById("onair").textContent = on ? "ON AIR" : "OFF AIR";
   document.getElementById("playBtn").textContent = on ? "⏸ 一時停止" : "▶ 放送をはじめる";
 }
-
 function armTimer(){
   if (sleepTimer) clearTimeout(sleepTimer);
-  if (timerMin > 0){
-    sleepTimer = setTimeout(stopAll, timerMin * 60 * 1000);
-    document.getElementById("timerNote").textContent = timerMin + "分後に自動停止";
-  } else {
-    document.getElementById("timerNote").textContent = "";
-  }
+  if (timerMin > 0) sleepTimer = setTimeout(stopAll, timerMin * 60 * 1000);
 }
-
 document.getElementById("playBtn").onclick = function(){
   if (speaking && !paused){
     if (window.speechSynthesis) speechSynthesis.pause();
@@ -423,7 +532,6 @@ document.getElementById("playBtn").onclick = function(){
   armTimer();
   if (window.speechSynthesis) speakNext();
 };
-
 function stopAll(){
   speaking = false; paused = false;
   if (window.speechSynthesis) speechSynthesis.cancel();
@@ -432,12 +540,39 @@ function stopAll(){
   var prev = document.querySelector("#scriptBox p.now");
   if (prev) prev.className = "";
   setOnAir(false);
-  var t = document.getElementById("bgmTest");
-  if (t) t.textContent = "🔊 BGMテスト";
 }
-document.getElementById("stopBtn").onclick = stopAll;
 
-// 初期化
+// ───── 棚(MP3) ─────
+var epLoaded = false;
+function loadEpisodes(){
+  if (epLoaded) return;
+  fetch("episodes.json?t=" + Date.now())
+    .then(function(r){ if (!r.ok) throw new Error("not found"); return r.json(); })
+    .then(function(eps){
+      epLoaded = true;
+      var list = document.getElementById("epList");
+      list.innerHTML = "";
+      if (!eps.length){ list.innerHTML = '<div class="note">まだエピソードがありません。</div>'; return; }
+      eps.forEach(function(ep){
+        var d = document.createElement("div");
+        d.className = "ep";
+        d.textContent = ep.title;
+        d.onclick = function(){
+          Array.prototype.forEach.call(list.children, function(c){ c.className = "ep"; });
+          d.className = "ep on";
+          var a = document.getElementById("epAudio");
+          a.src = ep.file;
+          a.play().catch(function(){});
+        };
+        list.appendChild(d);
+      });
+    })
+    .catch(function(){
+      document.getElementById("epList").innerHTML =
+        '<div class="note">episodes.json がまだ無いか、読み込めませんでした。</div>';
+    });
+}
+
 refreshLibUI();
 </script>
 </body>

@@ -89,7 +89,7 @@
       <span class="onair" id="onair">OFF AIR</span>
     </div>
     <h1>お好みラジオ</h1>
-    <div class="sub">v5 — 完全版</div>
+    <div class="sub">v5.1 — 完全版</div>
   </header>
 
   <section>
@@ -123,9 +123,13 @@
       <div class="label">読む速さ <span class="dim" id="rateVal">0.90</span></div>
       <input type="range" id="rate" min="0.6" max="1.2" step="0.05" value="0.9">
     </div>
-    <div class="mt14" id="voiceWrap" style="display:none">
-      <div class="label">こえ</div>
+    <div class="mt14" id="voiceWrap">
+      <div class="label">こえ <span class="dim" id="voiceCount"></span></div>
       <select id="voiceSel"></select>
+      <div class="row mt14">
+        <button class="ctl" id="voiceReload">↻ 声を再読み込み</button>
+        <button class="ctl" id="voiceTest">🗣 声テスト</button>
+      </div>
     </div>
   </section>
 
@@ -270,20 +274,46 @@ TIMERS.forEach(function(t){
 function loadVoices(){
   if (!window.speechSynthesis) return;
   var all = speechSynthesis.getVoices() || [];
-  jaVoices = all.filter(function(v){ return v.lang && v.lang.indexOf("ja") === 0; });
-  var sel = document.getElementById("voiceSel");
-  if (jaVoices.length){
+  var ja = all.filter(function(v){ return v.lang && v.lang.indexOf("ja") === 0; });
+  // 声が増えたときだけリストを作り直す(選択を保持)
+  if (ja.length && ja.length !== jaVoices.length){
+    var sel = document.getElementById("voiceSel");
+    var keep = sel.value;
+    jaVoices = ja;
     sel.innerHTML = "";
     jaVoices.forEach(function(v,i){
       var o = document.createElement("option");
-      o.value = i; o.textContent = v.name;
+      o.value = i;
+      o.textContent = v.name + (v.name.indexOf("拡張")>=0 || v.name.toLowerCase().indexOf("enhanced")>=0 ? " ★" : "");
       sel.appendChild(o);
     });
-    document.getElementById("voiceWrap").style.display = "block";
+    if (keep && keep < jaVoices.length) sel.value = keep;
+    document.getElementById("voiceCount").textContent = "(" + jaVoices.length + "声)";
   }
 }
 loadVoices();
-if (window.speechSynthesis) speechSynthesis.onvoiceschanged = loadVoices;
+if (window.speechSynthesis){
+  speechSynthesis.onvoiceschanged = loadVoices;
+  // iOS Safariは声リストが遅れて来るので、しつこくリトライ
+  [300, 800, 1500, 3000, 5000].forEach(function(ms){ setTimeout(loadVoices, ms); });
+}
+document.getElementById("voiceReload").onclick = function(){
+  jaVoices = []; // 強制再構築
+  loadVoices();
+  var n = (speechSynthesis.getVoices()||[]).filter(function(v){return v.lang && v.lang.indexOf("ja")===0;}).length;
+  if (!n) alert("まだ声リストが届いていません。もう一度押すか、ページを再読み込みしてください。");
+};
+document.getElementById("voiceTest").onclick = function(){
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance("こんばんは。この声と速さで、今夜の放送をお届けします。");
+  var selIdx = parseInt(document.getElementById("voiceSel").value || "0", 10);
+  if (jaVoices[selIdx]) u.voice = jaVoices[selIdx];
+  u.lang = "ja-JP";
+  u.rate = parseFloat(document.getElementById("rate").value);
+  u.pitch = 0.95;
+  speechSynthesis.speak(u);
+};
 
 document.getElementById("rate").oninput = function(){
   document.getElementById("rateVal").textContent = parseFloat(this.value).toFixed(2);

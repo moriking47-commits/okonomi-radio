@@ -155,6 +155,18 @@
         <button class="ghost" id="delBtn">コンテンツ削除</button>
         <button class="ghost" id="clearBtn">台本クリア</button>
       </div>
+      <div class="note" id="syncStatus">クラウド同期: 未設定</div>
+      <details style="margin-top:10px">
+        <summary class="dim">クラウド同期の設定(GitHub)</summary>
+        <input type="text" id="ghUser" placeholder="GitHubユーザー名(例: moriking47-commits)">
+        <input type="text" id="ghRepo" placeholder="リポジトリ名(例: okonomi-radio)">
+        <input type="text" id="ghToken" placeholder="トークン ghp_...">
+        <div class="row mt14">
+          <button class="ghost" id="syncSave">設定を保存</button>
+          <button class="ghost" id="syncPull">クラウドから取得</button>
+        </div>
+        <div class="note">この3つはこの端末内にのみ保存されます。設定後、「コンテンツ保存」で自動的にクラウドへ同期され、別の端末では「クラウドから取得」で同じ棚が読めます。</div>
+      </details>
     </section>
 
     <section>
@@ -325,6 +337,97 @@ document.getElementById("makeBtn").onclick = function(){
   } else { open(); }
 };
 
+// ───── クラウド同期(GitHub) ─────
+var GH = { user:"", repo:"", token:"" };
+try {
+  GH.user = localStorage.getItem("okonomi_gh_user") || "";
+  GH.repo = localStorage.getItem("okonomi_gh_repo") || "";
+  GH.token = localStorage.getItem("okonomi_gh_token") || "";
+} catch(e){}
+
+function updateSyncStatus(msg){
+  var el = document.getElementById("syncStatus");
+  if (el) el.textContent = "クラウド同期: " + msg;
+}
+(function initSyncUI(){
+  if (document.getElementById("ghUser")){
+    document.getElementById("ghUser").value = GH.user;
+    document.getElementById("ghRepo").value = GH.repo;
+    document.getElementById("ghToken").value = GH.token;
+  }
+  updateSyncStatus(GH.token ? "設定ずみ" : "未設定");
+})();
+
+document.getElementById("syncSave").onclick = function(){
+  GH.user = document.getElementById("ghUser").value.trim();
+  GH.repo = document.getElementById("ghRepo").value.trim();
+  GH.token = document.getElementById("ghToken").value.trim();
+  try {
+    localStorage.setItem("okonomi_gh_user", GH.user);
+    localStorage.setItem("okonomi_gh_repo", GH.repo);
+    localStorage.setItem("okonomi_gh_token", GH.token);
+  } catch(e){}
+  updateSyncStatus(GH.token ? "設定ずみ" : "未設定");
+  alert("クラウド同期の設定を保存しました。");
+};
+
+function ghReady(){ return GH.user && GH.repo && GH.token; }
+
+// GitHub APIで library.json を読む
+function ghGetLibrary(cb){
+  if (!ghReady()){ cb(null); return; }
+  var url = "https://api.github.com/repos/" + GH.user + "/" + GH.repo + "/contents/library.json";
+  fetch(url, { headers: { "Authorization": "token " + GH.token, "Accept": "application/vnd.github+json" } })
+    .then(function(r){
+      if (r.status === 404){ cb({ items: [], sha: null }); return; }
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json().then(function(data){
+        var json = decodeURIComponent(escape(atob(data.content.replace(/\n/g,""))));
+        var items = [];
+        try { items = JSON.parse(json); } catch(e){ items = []; }
+        cb({ items: items, sha: data.sha });
+      });
+    })
+    .catch(function(e){ updateSyncStatus("取得エラー " + e.message); cb(null); });
+}
+
+// GitHub APIで library.json を書く
+function ghPutLibrary(items, cb){
+  if (!ghReady()){ if (cb) cb(false); return; }
+  var url = "https://api.github.com/repos/" + GH.user + "/" + GH.repo + "/contents/library.json";
+  // まず現在のSHAを取得(更新には必要)
+  ghGetLibrary(function(cur){
+    var body = {
+      message: "update library " + new Date().toISOString(),
+      content: btoa(unescape(encodeURIComponent(JSON.stringify(items, null, 2))))
+    };
+    if (cur && cur.sha) body.sha = cur.sha;
+    fetch(url, {
+      method: "PUT",
+      headers: { "Authorization": "token " + GH.token, "Accept": "application/vnd.github+json", "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    })
+    .then(function(r){
+      if (!r.ok) return r.text().then(function(t){ throw new Error("HTTP " + r.status + " " + t.slice(0,120)); });
+      updateSyncStatus("保存しました " + new Date().toLocaleTimeString());
+      if (cb) cb(true);
+    })
+    .catch(function(e){ updateSyncStatus("保存エラー " + e.message); if (cb) cb(false); });
+  });
+}
+
+document.getElementById("syncPull").onclick = function(){
+  if (!ghReady()){ alert("先に設定を保存してください"); return; }
+  updateSyncStatus("取得中…");
+  ghGetLibrary(function(res){
+    if (!res){ return; }
+    try { localStorage.setItem("okonomi_lib", JSON.stringify(res.items)); } catch(e){}
+    refreshLibUI();
+    updateSyncStatus("取得しました(" + res.items.length + "件)");
+    alert("クラウドから " + res.items.length + " 件を取得しました。");
+  });
+};
+
 // ───── ライブラリ ─────
 function loadLib(){
   var saved = [];
@@ -361,6 +464,7 @@ document.getElementById("saveBtn").onclick = function(){
   saved.push({ id: id, title: title, text: text });
   try { localStorage.setItem("okonomi_lib", JSON.stringify(saved)); } catch(e){ alert("保存に失敗: " + e.message); return; }
   refreshLibUI(id);
+  if (ghReady()){ updateSyncStatus("クラウドへ保存中…"); ghPutLibrary(saved); }
 };
 document.getElementById("clearBtn").onclick = function(){
   stopAll();
@@ -377,6 +481,7 @@ document.getElementById("delBtn").onclick = function(){
   saved = saved.filter(function(x){ return x.id !== id; });
   try { localStorage.setItem("okonomi_lib", JSON.stringify(saved)); } catch(e){}
   refreshLibUI();
+  if (ghReady()){ updateSyncStatus("クラウドへ反映中…"); ghPutLibrary(saved); }
 };
 
 // ───── BGM ─────

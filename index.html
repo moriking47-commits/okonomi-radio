@@ -112,9 +112,9 @@
   </header>
 
   <div class="tabs">
-    <button class="tab" id="tabMake">台本をつくる</button>
-    <button class="tab on" id="tabPlay">きく(即席)</button>
-    <button class="tab" id="tabShelf">棚(MP3)</button>
+    <button class="tab on" id="tabPlay">ラジオを聞く</button>
+    <button class="tab" id="tabMake">台本作る</button>
+    <button class="tab" id="tabShelf">MP3</button>
   </div>
 
   <!-- ============ つくる ============ -->
@@ -151,8 +151,9 @@
       <div class="label">番組をえらぶ(ライブラリ)</div>
       <select id="libSel"></select>
       <div class="row mt14">
-        <button class="ghost" id="saveBtn">＋ 今の台本を保存</button>
-        <button class="ghost" id="delBtn">－ 削除</button>
+        <button class="ghost" id="saveBtn">コンテンツ保存</button>
+        <button class="ghost" id="delBtn">コンテンツ削除</button>
+        <button class="ghost" id="clearBtn">台本クリア</button>
       </div>
     </section>
 
@@ -360,6 +361,12 @@ document.getElementById("saveBtn").onclick = function(){
   saved.push({ id: id, title: title, text: text });
   try { localStorage.setItem("okonomi_lib", JSON.stringify(saved)); } catch(e){ alert("保存に失敗: " + e.message); return; }
   refreshLibUI(id);
+};
+document.getElementById("clearBtn").onclick = function(){
+  stopAll();
+  document.getElementById("scriptInput").value = "";
+  var box = document.getElementById("scriptBox");
+  box.innerHTML = ""; box.style.display = "none";
 };
 document.getElementById("delBtn").onclick = function(){
   var id = document.getElementById("libSel").value;
